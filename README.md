@@ -29,6 +29,11 @@ Considering that our local directory path is the same than the one existing on t
 Usage
 =====
 ```
+
+1. First, download s3md5 project (https://github.com/antespi/s3md5) into the aws_check_integrity folder.
+
+2. Next:
+
 Usage : aws_check_integrity.sh <local_path> <bucket_name> <folder>
 
 - local_path: local path of our server where all previously uploaded files are currently stored. For example: /data/nucCyt/raw_data/. 
