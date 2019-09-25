@@ -1,64 +1,62 @@
-s3md5
+aws_check_integrity
 =====
 
-Bash script to calculate Etag/S3 MD5 sum for very big files uploaded using multipart S3 API
+Bash script to check the integrity of a set of local files uploaded into an AWS S3 bucket.
 
 
 
 Description
 ===========
 
-Calculates the Etag/S3 MD5 Sum of a file, using the same algorithm that S3 uses on multipart uploaded files.
-Specially usefull on files bigger than 5GB uploaded using multipart S3 API. You can check file integrity
-comparing S3 Etag with the value returns by 's3md5 file'
+Considering that our local directory path is the same than the one existing on the S3 bucket (because it’s supposed that all its files have previously been uploaded into the bucket by using the sync command), the script will:
+
+Loop through the files in our local directory.
+
+Per each file found in the local folder the script will check its size (if the object found is a directory it will just continue looping through their children files):
+
+2.1.If the file size is smaller than 8MG, it will generate a simple MD5 digest.
+
+2.2. If the file size is bigger than 8MG, it will make a request to a s3md5 function (visit https://github.com/antespi/s3md5 - author: Antonio Espinosa) which will apply the same algorithm than AWS does: it will split the file into 8MG little parts, generate the MD5 hash of each little part and, finally, will generate the final MD5 digest number from the set of individual MD5 hashes.
+
+Retrieve the ETag number from the file with the same name stored on the S3 bucket.
+
+Compare that ETag number with the one we have just generated.
+
+4.1. If both are equals, we can confirm the integrity of the file stored on the S3 bucket. Otherwise, the script will generate an error. In both cases, the result is stored in a log file which name is S3_integrity_log.[timestamp].txt.
 
 
 
 Usage
 =====
+1. First, download s3md5 project (https://github.com/antespi/s3md5) into the aws_check_integrity folder.
+2. Next, grant execution permissions to he s3md5 script file.
 ```
-Usage : $APP <size> <file>
+> cd aws_check_integrity
+> chmod 755 ./s3md5/s3md5
+```
+3. Finally:
+```
+Usage : aws_check_integrity.sh <local_path> <bucket_name> <folder>
 
-- size : Multipart chunk size in MB
-- file : Calculate Etag of this file
+- local_path: local path of our server where all previously uploaded files are currently stored. For example: /data/nucCyt/raw_data/. 
+
+- bucket_name: the name of the S3 bucket we want to check. For example: nuccyt. 
+
+- folder: the name of the root folder on the S3 bucket. If there is not any folder in the root, this parameter will be a slash (/) indicating the root path. For example, raw_data/.
 ```
 
 
 Example
 =======
-
-* Use 15 MB chunk size (as default in s3cmd .s3cfg config file)
-
-    ~> s3md5 15 myfile.dat
-
-
-
-LICENSE
-=======
-
-s3md5 is free software: you can redistribute it and/or modify it
-under the terms of the GNU General Public License as published by the
-Free Software Foundation, either version 3 of the License, or (at your
-option) any later version.
-
-s3md5 is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along
-with s3md5. For license details you can read
-[LICENSE](https://github.com/teachnova/s3md5/blob/master/LICENSE)
-file. Also you can read GPLv3 from [GNU Licenses](http://www.gnu.org/licenses/).
-
+```
+> aws_check_integrity.sh /data/nucCyt/raw_data/ nuccyt raw_data/
+```
 
 
 AUTHOR
 ======
+Copyright (C) 2019<br />
+Sonia García Ruiz<br />
+Email : s.ruiz@ucl.ac.uk
+Web   : [Rytenlab](https://snca.atica.um.es/)
 
-Copyright (C) 2013<br />
-Antonio Espinosa<br />
-Email    : aespinosa at teachnova dot com<br />
-Twitter  : [@antespi](http://twitter.com/antespi)<br />
-LinkedIn : [Antonio Espinosa](http://es.linkedin.com/in/antonioespinosa)<br />
-Web      : [Teachnova](http://www.teachnova.com)
