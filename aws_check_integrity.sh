@@ -83,7 +83,7 @@ function upload_s3
 				#echo $file_size
 				etag_value="$(md5sum ${file} | awk '{ print $1 }')"
 			else
-				etag_value="$(./s3md5 8 $file)"
+				etag_value="$(./s3md5/s3md5 8 $file)"
 			fi
 			#echo $etag_value
 
