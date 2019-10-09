@@ -6,7 +6,7 @@ Bash script to check the integrity of a set of local files uploaded into an AWS 
 
 1. Connect to your AWS account. For this purpouse, you may want to use **aws configure** command in your Linux terminal. This command is interactive, so the AWS CLI will prompt you to enter additional information.
 
-   **IMPORTANT:** for the correct operation of this *aws_check_integrity.sh* script, the default output-format that must be chosen during the **aws configure** information requesting is **json**.
+   **IMPORTANT:** for the correct operation of this *aws_check_integrity.sh* script, **json** must be chosen as the preferred output format in the **aws configure** command execution.
 
 ```sh
 > aws configure 
