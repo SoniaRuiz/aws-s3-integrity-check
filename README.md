@@ -83,7 +83,7 @@ This script has been successfully tested on:
 ## AUTHOR
 
 Copyright (C) 2019<br />
-Sonia García Ruiz<br />
+[Sonia García Ruiz](https://github.com/SoniaRuiz)<br />
 Email : s.ruiz@ucl.ac.uk<br />
 Web   : [Rytenlab](https://snca.atica.um.es/)
 
