@@ -2,7 +2,6 @@
 
 Bash script to check the integrity of a set of local files uploaded into an AWS S3 bucket.
 
-
 ## Prerequisites
 
 1. Connect to your AWS account. For this purpouse, you may want to type **aws configure** in your Linux terminal, and then press Enter. This command is interactive, so the AWS CLI will prompt you to enter additional information:
@@ -20,6 +19,10 @@ Default output format [None]: json
 ```sh
 > aws s3 sync your_local_folder_path s3://your-bucket/path 
 
+```
+Let's suppose the following example (we will made use of this example later in this file):
+```sh
+> aws s3 sync /data/nucCyt/raw_data s3://nuccyt 
 ```
 
 ## Description
@@ -68,6 +71,11 @@ Usage : aws_check_integrity.sh <local_path> <bucket_name> <folder>
 > aws_check_integrity.sh /data/nucCyt/raw_data/ nuccyt raw_data/
 ```
 
+## Supported platforms
+
+This script has been successfully tested on:
+
+* Ubuntu 16.04.6 LTS (Xenial Xerus)
 
 ## AUTHOR
 
