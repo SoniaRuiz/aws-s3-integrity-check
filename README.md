@@ -11,9 +11,9 @@ Bash script to check the integrity of a set of local files uploaded into an AWS 
 ```sh
 > aws configure 
 
-AWS Access Key ID [None]: type_your_AWS_access_key_ID 
-AWS Secret Access Key [None]: type_your_AWS_secret_access_key 
-Default region name [None]: type_your_default_region_name 
+AWS Access Key ID [None]: your_AWS_access_key_ID 
+AWS Secret Access Key [None]: your_AWS_secret_access_key 
+Default region name [None]: your_default_region_name 
 Default output format [None]: json 
 ```
 
