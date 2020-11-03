@@ -1,4 +1,4 @@
-# aws_check_integrity
+# aws-s3-integrity-check
 
 Bash script to check the integrity of a set of local files uploaded into an AWS S3 bucket.
 
@@ -44,21 +44,20 @@ Considering that your local directory path structure is the same one than the ex
 
 ## Usage
 
-1. First, download [**s3md5** project](https://github.com/antespi/s3md5) and store it within the *aws_check_integrity* folder.
+1. First, download [**s3md5**](https://github.com/antespi/s3md5) repo.
 2. Next, grant execution access to he s3md5 script file.
 ```sh
-> cd aws_check_integrity
 > chmod 755 ./s3md5/s3md5
 ```
-3. Download this repo:
+3. Download **aws-s3-integrity-check** repo:
 ```sh
-> git clone https://github.com/SoniaRuiz/aws_check_integrity.git
+> git clone https://github.com/SoniaRuiz/aws-s3-integrity-check.git
 ```
-4. Move the *s3md5* folder within the *aws_check_integrity* folder downloaded from this repo:
+4. Move the *s3md5* folder within the *aws-s3-integrity-check* folder:
 ```sh
-> mv ./s3md5 ./aws_check_integrity
+> mv ./s3md5 ./aws-s3-integrity-check
 ```
-5. The *aws_check_integrity* folder should look similar to:
+5. The *aws-s3-integrity-check* folder should look similar to the following:
 ```sh
 total 16
 -rw-r--r-- 1 your_user your_group 3573 date README.md
