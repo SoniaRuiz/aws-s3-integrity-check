@@ -25,22 +25,21 @@ Default output format [None]: json
 
 ## Description
 
-Considering that our local directory path structure is the same one than the existing on our S3 bucket (please, check the 'Prerequisites' section above) **aws_check_integrity.sh** script will:
+Considering that your local directory path structure is the same one than the existing on our S3 bucket (please, check the 'Prerequisites' section above) **aws_check_integrity.sh** script will:
 
-1. Loop through the set of files within our local directory.
+1. Loop through the set of files within your local directory.
 
-2. Per each file found in the local folder the script will check its size (if the object found is a directory it will just continue looping through their children files):
+2. Per each file found in your local folder, the script will check its size (in case the object found is a directory, it will just continue looping through its files):
 
    * If the file size is smaller than 8MG, it will generate a simple MD5 digest value.
 
-   * If the file size is bigger than 8MG, it will make a request to a [s3md5](https://github.com/antespi/s3md5) function (author: [Antonio Espinosa](https://github.com/antespi)) which will apply the same algorithm as AWS does: it will split the file into 8MG little parts, generate the MD5 hash of each little part and, finally, will generate the final MD5 digest number from the set of individual MD5 hashes.
+   * If the file size is bigger than 8MG, it will make a request to a [s3md5](https://github.com/antespi/s3md5) function (author: [Antonio Espinosa](https://github.com/antespi)) which will apply the same algorithm as AWS does: it will split the file into 8MG little parts, generate the MD5 hash of each little part and generate the final MD5 digest number from the set of individual MD5 hashes.
 
 3. Retrieve the ETag value from the same file stored on the S3 bucket.
 
-4. Compare the retrieved ETag value with the one we have just generated.
+4. Compare the retrieved ETag value with the one the script has just generated.
 
-   * If both ETag numbers are equals, we can confirm the integrity of the file stored on the S3 bucket. Otherwise, the script will generate an error. In both cases, the result is stored in a log file which name will be S3_integrity_log.[timestamp].txt.
-
+   * If both ETag numbers are equals, the script will confirm the integrity of the file stored on the S3 bucket. Otherwise, the script will generate an error. In any case, the result will be stored within a log file which name will follow the pattern: S3_integrity_log.timestamp_bucketname.txt. The log file will be stored within a folder called 'logs', which the script will automatically create in the current path in case it doesn't exist yet.
 
 
 ## Usage
@@ -51,15 +50,30 @@ Considering that our local directory path structure is the same one than the exi
 > cd aws_check_integrity
 > chmod 755 ./s3md5/s3md5
 ```
-3. Finally:
+3. Download this repo:
+```sh
+> git clone https://github.com/SoniaRuiz/aws_check_integrity.git
 ```
-Usage : aws_check_integrity.sh <local_path> <bucket_name> <folder>
+4. Move the *s3md5* folder within the *aws_check_integrity* folder downloaded from this repo:
+```sh
+> mv ./s3md5 ./aws_check_integrity
+```
+5. The *aws_check_integrity* folder should look similar to:
+```sh
+total 16
+-rw-r--r-- 1 your_user your_group 3573 date README.md
+-rwxr-xr-x 1 your_user your_group 3301 date aws_check_integrity.sh
+drwxr-xr-x 2 your_user your_group 4096 date s3md5
+```
+6. Execute the script 'aws_check_integrity.sh' following the instructions below:
+```
+Usage : aws_check_integrity.sh <local_path> <bucket_name> <bucket_folder>
 
 - local_path: local path of our server where all previously uploaded files are currently stored. For example: /data/nucCyt/raw_data/. 
 
 - bucket_name: the name of the S3 bucket we want to check. For example: nuccyt. 
 
-- bucket_folder: the name of the root folder on the S3 bucket. For example: raw_data. If there is not any folder in the root, this parameter will be a slash (/) indicating the root path. 
+- bucket_folder: the name of the root folder on the S3 bucket. For example: raw_data/. If there is not any folder in the root, this parameter will be a slash (/) indicating the root path. 
 ```
 
 
