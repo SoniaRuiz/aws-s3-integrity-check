@@ -1,7 +1,7 @@
 #!/bin/bash
-#echo "First arg: $1"
-#echo "Second arg: $2"
-#echo "Third arg: $3"
+#echo "First arg: $1 <local_path>"
+#echo "Second arg: $2 <bucket_name>"
+#echo "Third arg: $3 <bucket_folder>"
 
 #########################
 ## Prerrequisites
@@ -17,7 +17,7 @@
 if [ $# -ne  3 ]; then
 	printf "\n"
 	echo "ERROR: Please pass arguments."
-	printf "Usage :\n aws_check_integrity.sh <local_path> <bucket_name> <folder>\n\t- local_path: local path where all uploaded files are currently stored. For example: /data/nucCyt/raw_data/.\n\t- bucket_name: the name of the S3 bucket we want to check. For example: nuccyt.\n\t- folder: the name of the root folder on the S3 bucket. In case there is not any folder in the root, this parameter will be a slash (/) indicating the root path. Example, raw_data/.\n\n"
+	printf "Usage :\n aws_check_integrity.sh <local_path> <bucket_name> <bucket_folder>\n\t- local_path: local path where all files, previously uploaded on AWS, are currently stored. For example: /data/nucCyt/raw_data/.\n\t- bucket_name: the name of the S3 bucket we want to check. For example: nuccyt.\n\t- bucket_folder: the name of the root folder on the S3 bucket. For example raw_data. In case there is not any folder in the root, this parameter will be a slash (/) indicating the root path. Example, raw_data/.\n\n"
 	exit -1
 elif [ ! -d "$1" ]; then
 	printf "\n"
@@ -34,9 +34,12 @@ fi
 ########################
 ## Create log file
 ########################
-log_file=S3_integrity_log
+if [ ! -d ./logs ]; then
+  mkdir -p ./logs;
+fi
+log_file=./logs/S3_integrity_log
 current_time=$(date "+%Y.%m.%d-%H.%M.%S")
-log_file=$log_file.$current_time.txt
+log_file=$log_file.$current_time.$2.txt
 echo "Log filename: " "$log_file"
 
 ########################
@@ -58,14 +61,14 @@ function upload_s3
 
 
 		if [ -d "$file" ]; then
-			## THE OBJECT IS A DIRECTORY
+			## THE LOCAL OBJECT IS A DIRECTORY
 
 			upload_s3 "$file"
 
 		elif [ -f "$file" ]; then
-			## THE OBJECT IS A FILE
+			## THE LOCAL OBJECT IS A FILE
 
-			# Remove the base folder from the local file path - so we could have the AWS path corresponding to the current local file
+			# Remove the base folder from the local file path to have the AWS path corresponding to the current local file
                         aws_file_path=${file#"$base_folder"}
 
 			## Remove the first first "/" character if it exists
