@@ -17,13 +17,8 @@ Default region name [None]: your_default_region_name
 Default output format [None]: json 
 ```
 
-2. Synchronize your local folder with your AWS bucket. For this purpouse, you may want to use AWS CLI **sync** command as follows:
+2. Synchronize your local folder with your AWS bucket. For this purpouse, you may want to use the AWS CLI **sync** command as follows (we'll made use from the example below later in this file):
 
-```sh
-> aws s3 sync your_local_folder_path s3://your-bucket/path 
-
-```
-Let's suppose the following example (we will made use of this example later in this file):
 ```sh
 > aws s3 sync /data/nucCyt/raw_data s3://nuccyt 
 ```
@@ -64,7 +59,7 @@ Usage : aws_check_integrity.sh <local_path> <bucket_name> <folder>
 
 - bucket_name: the name of the S3 bucket we want to check. For example: nuccyt. 
 
-- folder: the name of the root folder on the S3 bucket. If there is not any folder in the root, this parameter will be a slash (/) indicating the root path. For example, raw_data/.
+- bucket_folder: the name of the root folder on the S3 bucket. For example: raw_data. If there is not any folder in the root, this parameter will be a slash (/) indicating the root path. 
 ```
 
 
@@ -82,8 +77,8 @@ This script has been successfully tested on:
 
 ## AUTHOR
 
-Copyright (C) 2019<br />
+Copyright (C) 2020<br />
 [Sonia García Ruiz](https://github.com/SoniaRuiz)<br />
 Email : s.ruiz@ucl.ac.uk<br />
-Web   : [Rytenlab](https://snca.atica.um.es/)
+Web   : [Rytenlab](https://rytenlab.com/)
 
