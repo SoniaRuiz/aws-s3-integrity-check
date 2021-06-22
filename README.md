@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5012285.svg)](https://doi.org/10.5281/zenodo.5012285)
+
 # aws-s3-integrity-check
 
 Bash script to check the integrity of a set of local files uploaded into an AWS S3 bucket.
