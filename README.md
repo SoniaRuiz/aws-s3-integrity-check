@@ -68,20 +68,21 @@ drwxr-xr-x 2 your_user your_group 4096 date s3md5
 ```
 6. Execute the script 'aws_check_integrity.sh' following the instructions below:
 ```
-Usage : aws_check_integrity.sh <local_path> <bucket_name> <bucket_folder>
+Usage : aws_check_integrity.sh <local_path> <bucket_name> <bucket_folder> <aws_profile>
 
 - local_path: local path of our server where all previously uploaded files are currently stored. For example: /data/nucCyt/raw_data/. 
 
 - bucket_name: the name of the S3 bucket we want to check. For example: nuccyt. 
 
 - bucket_folder: the name of the root folder on the S3 bucket. For example: raw_data/. If there is not any folder in the root, this parameter will be a slash (/) indicating the root path. 
+- aws_profile: a non-default aws profile used to push and verify data
 ```
 
 
 ## Example
 
 ```sh
-> aws_check_integrity.sh /data/nucCyt/raw_data/ nuccyt raw_data/
+> aws_check_integrity.sh /data/nucCyt/raw_data/ nuccyt raw_data/ non_default_aws_profile
 ```
 
 ## Supported platforms
