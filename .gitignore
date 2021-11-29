@@ -2,4 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
-./logs
+logs/
+s3md5/
