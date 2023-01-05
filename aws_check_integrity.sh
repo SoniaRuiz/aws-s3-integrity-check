@@ -44,6 +44,14 @@ else
 fi
 
 
+#########################
+## Get script abs path ##
+#########################
+
+path=$(realpath "${BASH_SOURCE:-$0}")
+dir_path=$(dirname $path)
+
+
 ########################
 ## Create log file
 ########################
@@ -100,7 +108,7 @@ function upload_s3
 			if [ "$file_size" -lt 8000000 ]; then
 				etag_value="$(md5sum "$i" | awk '{ print $1 }')"
 			else
-				etag_value="$(./s3md5/s3md5 8 "$i")"
+				etag_value="$($dir_path/s3md5/s3md5 8 "$i")"
 			fi
 
 			#################################################
