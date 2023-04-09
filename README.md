@@ -14,32 +14,34 @@ Bash script to check the integrity of a set of local files uploaded into an AWS 
 
 **IMPORTANT:** for the correct function of this *aws_check_integrity.sh* tool, you should choose **json** as the output format during the authentication process. Example:
 
-```sh
-> aws configure 
+```bash
+$ aws configure 
 
 AWS Access Key ID [None]: your_AWS_access_key_ID 
 AWS Secret Access Key [None]: your_AWS_secret_access_key 
 Default region name [None]: your_default_region_name 
 Default output format [None]: json 
+
 ```
 
 3. Install [**'jq'** software](https://stedolan.github.io/jq/)
 
 4. Download [**s3md5**](https://github.com/antespi/s3md5) repo.
 
+
 ## Intallation
 
 1. Once you have download the [**s3md5**](https://github.com/antespi/s3md5) repo, grant execution access to he s3md5 script file.
 ```sh
-> chmod 755 ./s3md5/s3md5
+$ chmod 755 ./s3md5/s3md5
 ```
 2. Download **aws-s3-integrity-check** repo:
 ```sh
-> git clone https://github.com/SoniaRuiz/aws-s3-integrity-check.git
+$ git clone https://github.com/SoniaRuiz/aws-s3-integrity-check.git
 ```
 3. Move the *s3md5* folder within the *aws-s3-integrity-check* folder:
 ```sh
-> mv ./s3md5 ./aws-s3-integrity-check
+$ mv ./s3md5 ./aws-s3-integrity-check
 ```
 4. The contents of the *aws-s3-integrity-check* folder should look similar to the following:
 ```sh
@@ -50,8 +52,8 @@ drwxr-xr-x 2 your_user your_group 4096 date s3md5
 ```
 5. Run the script 'aws_check_integrity.sh' following the instructions below:
 
-```sh
-bashaws_check_integrity.sh -l <local_path> -b <bucket_name> -p <aws_profile>
+```bash
+$ bash aws_check_integrity.sh -l <local_path> -b <bucket_name> -p <aws_profile>
 
 * -l <local_path>: [required] local path containing the orginal files uploaded to AWS S3 that we want to test their integrity. Example: -l /data/nucCyt/. 
 * -b <bucket_name>: [required] the name of the S3 bucket containing the files that we want to check their integrity. Example: -b nuccyt. 
@@ -79,45 +81,10 @@ The **aws_check_integrity.sh** bash script does:
 6. If both ETag numbers and file names are identical, the script will confirm the integrity of the file stored on the AWS S3 bucket. On the contrary, the script will generate an error. In both cases, the result will be stored within a log file with the following name pattern: *bucket_name.S3_integrity_log.timestamp_bucketname.txt*. The log file will be stored within a folder called 'logs', which the script will automatically create within the path where the *aws-s3-integrity-check.sh* file is located in case the folder doesn't exist yet.
 
 
-## Usage
-
-1. First, download [**s3md5**](https://github.com/antespi/s3md5) repo.
-2. Next, grant execution access to he s3md5 script file.
-```sh
-> chmod 755 ./s3md5/s3md5
-```
-3. Download **aws-s3-integrity-check** repo:
-```sh
-> git clone https://github.com/SoniaRuiz/aws-s3-integrity-check.git
-```
-4. Move the *s3md5* folder within the *aws-s3-integrity-check* folder:
-```sh
-> mv ./s3md5 ./aws-s3-integrity-check
-```
-5. The *aws-s3-integrity-check* folder should look similar to the following:
-```sh
-total 16
--rw-r--r-- 1 your_user your_group 3573 date README.md
--rwxr-xr-x 1 your_user your_group 3301 date aws_check_integrity.sh
-drwxr-xr-x 2 your_user your_group 4096 date s3md5
-```
-6. Execute the script 'aws_check_integrity.sh' following the instructions below:
-```
-Usage : aws_check_integrity.sh <local_path> <bucket_name> <bucket_folder> <aws_profile>
-
-- local_path: local path of our server where all previously uploaded files are currently stored. For example: /data/nucCyt/raw_data/. 
-
-- bucket_name: the name of the S3 bucket we want to check. For example: nuccyt. 
-
-- bucket_folder: the name of the root folder on the S3 bucket. For example: raw_data/. If there is not any folder in the root, this parameter will be a slash (/) indicating the root path. 
-- aws_profile: a non-default aws profile used to push and verify data
-```
-
-
 ## Example
 
 ```sh
-> aws_check_integrity.sh -l /data/nucCyt/ -b nuccyt -p my_aws_profile
+$ bash aws_check_integrity.sh -l /data/nucCyt/ -b nuccyt -p my_aws_profile
 ```
 
 ## Supported platforms
