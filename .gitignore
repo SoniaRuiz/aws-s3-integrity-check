@@ -4,3 +4,4 @@
 .Ruserdata
 logs/
 s3md5/
+aws*
