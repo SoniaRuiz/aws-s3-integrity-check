@@ -1,4 +1,21 @@
 #!/bin/bash
+# aws-s3-integrity-check  Copyright (C) 2023
+#        Sonia García-Ruiz <sruiz at ucl dot ac dot uk>
+#
+# aws-s3-integrity-check is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# aws-s3-integrity-check is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with aws-s3-integrity-check.  If not, see <http://www.gnu.org/licenses/>.
+
+
 #echo "First arg: $1 <local_path>"
 #echo "Second arg: $2 <bucket_name>"
 #echo "Third arg: $3 <bucket_folder>"
@@ -8,9 +25,10 @@
 ## Prerrequisites
 ########################
 
-# 1. The user must be already connected to S3
-# 2. The local directory must have beeen sincronised with AWS by using the "sync" command
-
+# 1. The local directory "-l <local_folder>" must have beeen sincronised with the 
+#    "-b <bucket_name>" Amazon S3 bucket by using the "sync" command.
+# 2. The user must have already authenticated to Amazon S3, i.e. "aws configure" or "aws configure sso".
+# 3. The user must have access permissions to the "-b <bucket_name>" Amazon S3 bucket.
 
 ####################################################################
 ## Get the absolute path of this script within the local computer ##
@@ -19,18 +37,12 @@
 path=$(realpath "${BASH_SOURCE:-$0}")
 dir_path=$(dirname $path)
 
-# 
-# result="$("$dir_path"/s3md5/s3md5.sh 8 "$dir_path"/s3md5/readme.txt 2>&1)"
-# echo "$result"
-# exit -1
-
-#########################
-## Receive parameters
-#########################
+######################################
+## Receive and evaluate parameters
+######################################
 
 local_folder=""
 bucket_name=""
-aws_base_folder=""
 aws_profile=""
 
 print_aws_login() {
@@ -42,31 +54,20 @@ print_aws_login() {
 }
 print_usage() {
   printf "USAGE :\n aws_check_integrity.sh -l <local_path> -b <bucket_name> -r <bucket_folder> -p <aws_profile>
-	* -l <local_folder>: [required] local folder that contains the original files uploaded to AWS. Example: -l \"/data/nucCyt/raw_data/\"
-	* -b <bucket_name>: [required] AWS S3 bucket that contains the uploaded files we want to check. Example: -b \"nuccyt\".
-	* -r <bucket_folder>: [optional] the name of the folder within the S3 bucket that is currently storing the files to check. Example: -r \"fccyt\".
-	* -p <aws_profile>: [optional] your AWS profile. Example: -p \"my_profile\"\n\n"
+    * -l <local_folder>: [required] path to a local folder containing the original version of the files uploaded to Amazon S3. Example: -l \"/data/nucCyt/raw_data/\"
+    * -b <bucket_name>: [required] Amazon S3 bucket containing the previously uploaded files indicated within "-l <local_folder>". Example: -b \"nuccyt\".
+    * -p <aws_profile>: [optional] AWS profile in case the user has logged in using the command *aws configure sso*. Example: -p \"my_profile\"\n\n"
 }
 
-while getopts "l:b:r:p:" arg; do
+while getopts "l:b:p:" arg; do
   case $arg in
     l) local_folder=$OPTARG;;
     b) bucket_name=$OPTARG;;
-    r) aws_base_folder=$OPTARG;;
     p) aws_profile=$OPTARG;;
     ?) print_usage
        exit 1 ;;
   esac
 done
-
-#printf "$local_folder"
-#printf "$bucket_name"
-#printf "$aws_base_folder"
-#printf "$OPTIND"
-
-
-#shift $((OPTIND-1))
-#echo "$# non-option arguments"
 
 if [ $OPTIND -eq 1 ]; then 
   printf "\n"
@@ -97,7 +98,6 @@ fi
 ## TEST THE CONNECTION TO AWS
 ####################################################################
 
-printf "aws_profile"
 if [ "$aws_profile" = "" ]; then
   RESULT="$(aws s3 ls 2>&1)"
 else
@@ -118,10 +118,10 @@ fi
 ########################
 ## Create log file
 ########################
-echo "logs"
-# if [ ! -d "$dir_path/logs" ]; then
-#   mkdir -p "$dir_path/logs";
-# fi
+
+if [ ! -d "$dir_path/logs" ]; then
+  mkdir -p "$dir_path/logs";
+fi
 
 
 log_file="$dir_path/logs/$bucket_name.S3_integrity_log"
@@ -139,17 +139,20 @@ echo $(date "+%T Reading objects metadata from AWS...")
 
 aws_bucket_all_files="$(aws s3api list-objects --bucket "$bucket_name" --profile "$aws_profile" 2>&1)"
 
-if [ "$aws_bucket_all_files" = "*error*" ]; then
+if [[ "$aws_bucket_all_files" == *"Unable"* ]]; then
+  printf "\n"
+  echo "ERROR: $aws_bucket_all_files"
+  printf "\n"
+  exit -1
+elif [[ "$aws_bucket_all_files" == *"error"* ]]; then
   printf "\n"
 	echo "ERROR: It has not been possible to read data from $bucket_name bucket.\n\nDo you have read access to bucket $bucket_name?"
 	printf "\n"
-  exit 1
+  exit -1
 else
   echo $(date "+%T Metadata read!")
 fi
 
-echo "$aws_bucket_all_files"
-exit -1
 ########################
 ## Main function
 ########################
@@ -183,8 +186,8 @@ upload_s3() {
       result=$(echo "$aws_bucket_all_files" | jq -r '.Contents[] | select((.Key | contains ("'$file_name'")) ) | .Key ' 2>&1)
       
       if [[ "$result" == "" ]]; then
-        echo $(date "+%T - FILE NOT FOUND: file '$i' not found within the bucket '$bucket_name' on AWS!") 
-        echo $(date "+%T - FILE NOT FOUND: file '$i' not found within the bucket '$bucket_name' on AWS!") >> "${log_file}"
+        echo $(date "+%T - FILE NOT FOUND: file '$i' not found within the Amazon S3 bucket '$bucket_name'.") 
+        echo $(date "+%T - FILE NOT FOUND: file '$i' not found within the Amazon S3 bucket '$bucket_name'.") >> "${log_file}"
       else
       
         ## CALCULATE THE ETAG VALUE FOR THE LOCAL FILE
@@ -205,11 +208,10 @@ upload_s3() {
   			fi
   			
   			## Calculate the ETag value
-  			if [ "$file_size" -lt 8000000 ]; then
+  			if [ "$file_size" -lt 8388608 ]; then
   				etag_value="$(md5sum "$i" | awk '{ print $1 }')"
   			else
-  		
-  				etag_value="$(bash $dir_path/s3md5/s3md5.sh 8 "$i")"
+  				etag_value="$($dir_path/s3md5/s3md5 8 "$i")"
   			fi
   			
 
@@ -238,5 +240,9 @@ upload_s3() {
 upload_s3 "$local_folder" "$bucket_name" "$aws_profile"
 
 ## For stats, store the total file size processed
+if [[ "$total_file_size_processed" == "" ]]; then
+  total_file_size_processed="0"
+fi
+
 total_file_size_processed_HR=$(echo "$total_file_size_processed" | numfmt --to=iec)
-echo $(date "+%T - FILE PROCESSING FINISHED! $total_file_size_processed_HR processed. ") >> "${log_file}"
+echo $(date "+%T - FILE PROCESSING FINISHED! "$total_file_size_processed_HR" processed. ") >> "${log_file}"
