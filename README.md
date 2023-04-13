@@ -29,7 +29,7 @@ Default output format [None]: json
 4. Download [**s3md5**](https://github.com/antespi/s3md5) repo.
 
 
-## Intallation
+## Installation
 
 1. Once you have download the [**s3md5**](https://github.com/antespi/s3md5) repo, grant execution access to he s3md5 script file.
 ```sh
@@ -99,7 +99,7 @@ This bash tool has been successfully tested on:
 This tool is available on:
 
 * protocols.io
-* DockerHub
+* DockerHub: [https://hub.docker.com/r/soniaruiz/aws-s3-integrity-check](https://hub.docker.com/r/soniaruiz/aws-s3-integrity-check)
 
 ## AUTHOR
 
