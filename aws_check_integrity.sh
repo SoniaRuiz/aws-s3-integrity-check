@@ -46,52 +46,75 @@ bucket_name=""
 aws_profile=""
 
 print_aws_login() {
-  printf "EXAMPLE :\n 
-	* aws configure
-	* aws configure sso
-	* More info: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-authentication.html\n\n"
+  printf "\n
+  EXAMPLE: 
+	\taws configure
+	\taws configure sso
+	\tMore info: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-authentication.html\n\n"
 	
 }
-print_usage() {
-  printf "USAGE :\n aws_check_integrity.sh -l <local_path> -b <bucket_name> -r <bucket_folder> -p <aws_profile>
-    * -l <local_folder>: [required] path to a local folder containing the original version of the files uploaded to Amazon S3. Example: -l \"/data/nucCyt/raw_data/\"
-    * -b <bucket_name>: [required] Amazon S3 bucket containing the previously uploaded files indicated within "-l <local_folder>". Example: -b \"nuccyt\".
-    * -p <aws_profile>: [optional] AWS profile in case the user has logged in using the command *aws configure sso*. Example: -p \"my_profile\"\n\n"
+usage() {
+  printf "\n
+  USAGE
+  \t[bash aws_check_integrity.sh] Verifies the integrity of a set of files uploaded/downloaded to/from Amazon S3.\n
+  SYPNOSIS\n
+  \tbash aws_check_integrity.sh [-l|--local <local_path>] [-b|--bucket <bucket_name>] [-p|--profile <aws_profile>]\n
+  DESCRIPTION\n
+  \tVerifies the integrity of a set of files uploaded/downloaded to/from Amazon S3.\n
+  \tUsing one single query to Amazon S3, it downloads all the ETag numbers associated with the files contained within a particular Amazon S3 bucket. 
+  \tFor each file stored within a local folder, it uses the s3md5 tool to calculate the Etag number corresponding to its data contents and then compare this number with the ETag value downloaded from Amazon S3.
+  \tIf both ETag numbers are identical, the integrity of the file is proven.
+  
+  \tOptions:
+    \t\t-l|--local    <local_folder>  [required] Path to a local folder containing the original version of the files uploaded to Amazon S3. Example: -l /data/nucCyt/raw_data/
+    \t\t-b|--bucket   <bucket_name>   [required] Amazon S3 bucket containing the files uploaded from the local folder '-l <local_folder>'. Example: -b nuccyt
+    \t\t-p|--profile  <aws_profile>   [optional] AWS profile in case the user has logged in using the command *aws configure sso*. Example: -p my_aws_profile
+    \t\t-h|--help                     [optional] Shows further help options \n\n"
+  exit 1
 }
 
-while getopts "l:b:p:" arg; do
+
+for arg in "$@"; do
+  shift
+  case "$arg" in
+    '--local')   set -- "$@" '-l'   ;;
+    '--bucket') set -- "$@" '-b'   ;;
+    '--profile')   set -- "$@" '-p'   ;;
+    '--help')   set -- "$@" '-h'   ;;
+    '--'*) usage exit 1 ;;
+    *) set -- "$@" "$arg" ;;
+  esac
+done
+
+#echo "$arg"
+
+while getopts "l:b:p:h" arg; do
   case $arg in
     l) local_folder=$OPTARG;;
     b) bucket_name=$OPTARG;;
     p) aws_profile=$OPTARG;;
-    ?) print_usage
-       exit 1 ;;
+    ?) usage ;;
   esac
 done
 
 if [ $OPTIND -eq 1 ]; then 
   printf "\n"
 	echo "ERROR: The arguments '-l <local_path>' and '-b <bucket_name>' are required!"
-	printf "\n"
-	print_usage
+	usage 
 	exit -2
 elif [ "$local_folder" = '' ]; then
 	printf "\n"
-	echo "ERROR: The argument '-l' is required!"
-	printf "\n"
-	print_usage
-	exit -2
+	echo "ERROR: The argument '-l' or '--local' is required!"
+	usage 
 elif [ ! -d "$local_folder" ]; then
 	printf "\n"
 	echo "ERROR. No such directory exist: $local_folder"
 	printf "\n"
-	exit -2
 elif [ "$bucket_name" = '' ]; then
 	printf "\n"
-	echo "ERROR: The argument '-b' is required!"
+	echo "ERROR: The argument '-b' or '--bucket' is required!"
+	usage 
 	printf "\n"
-	print_usage
-	exit -2
 fi
 
 ####################################################################
