@@ -25,7 +25,8 @@ The **aws_check_integrity.sh** bash script does:
 
 ## Prerequisites
 
-1. Install [**'jq'**](https://stedolan.github.io/jq/) software.
+1. Install [**jq**](https://stedolan.github.io/jq/) software.
+2. Install [**xxd**](https://manpages.ubuntu.com/manpages/bionic/en/man1/xxd.1.html) software, version 1.10 27oct98 by Juergen Weigert.
 2. Clone [**s3md5**](https://github.com/antespi/s3md5) GitHub repository.
 ```bash
 $ git clone https://github.com/antespi/s3md5.git
