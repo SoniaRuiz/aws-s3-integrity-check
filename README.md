@@ -2,40 +2,30 @@
 
 # aws-s3-integrity-check
 
-Bash script to check the integrity of a set of local files uploaded into an AWS S3 bucket.
+Bash tool to verify the integrity of a dataset uploaded/downloaded to/from an Amazon S3 bucket.
 
 ## Prerequisites
 
-1. Install AWS Command Line Interface (CLI). [More info](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
-2. Log in into your AWS account through AWS CLI. Depending on the authentication mode you choose, the command to use will be different:
-
-* aws configure: if you login using an IAM role (KEY + SECRET).
-* aws configure sso: if you login using the AWS Single Sign-On (SSO) service.
-
-**IMPORTANT:** for the correct function of this *aws_check_integrity.sh* tool, you should choose **json** as the output format during the authentication process. Example:
-
+1. Install [**'jq'** software](https://stedolan.github.io/jq/)
+2. Download [**s3md5**](https://github.com/antespi/s3md5) GitHub repository.
 ```bash
-$ aws configure 
-
-AWS Access Key ID [None]: your_AWS_access_key_ID 
-AWS Secret Access Key [None]: your_AWS_secret_access_key 
-Default region name [None]: your_default_region_name 
-Default output format [None]: json 
-
+$ git clone https://github.com/antespi/s3md5.git
 ```
+3. Install AWS Command Line Interface (CLI). [More info](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+4. Log in into your AWS account through AWS CLI. Depending on the authentication mode chosen, the AWS command to use will differ:
 
-3. Install [**'jq'** software](https://stedolan.github.io/jq/)
+* aws configure: if you login on AWS using an IAM role (KEY + SECRET).
+* aws configure sso: if you login on AWS using the AWS Single Sign-On (SSO) service.
 
-4. Download [**s3md5**](https://github.com/antespi/s3md5) repo.
-
+**IMPORTANT:** for the correct function of this *aws_check_integrity.sh* tool, you should choose **JSON** as the output format during the authentication process. 
 
 ## Installation
 
-1. Once you have download the [**s3md5**](https://github.com/antespi/s3md5) repo, grant execution access to he s3md5 script file.
+1. Once you have cloned the [**s3md5**](https://github.com/antespi/s3md5) GitHub repository, you will need to grant execution access to he s3md5 bash script file.
 ```sh
 $ chmod 755 ./s3md5/s3md5
 ```
-2. Download **aws-s3-integrity-check** repo:
+2. Clone the **aws-s3-integrity-check** GitHub repository:
 ```sh
 $ git clone https://github.com/SoniaRuiz/aws-s3-integrity-check.git
 ```
@@ -50,16 +40,18 @@ total 16
 -rwxr-xr-x 1 your_user your_group 3301 date aws_check_integrity.sh
 drwxr-xr-x 2 your_user your_group 4096 date s3md5
 ```
-5. Run the script 'aws_check_integrity.sh' following the instructions below:
+5. Run the script 'aws_check_integrity.sh' bash script by following the instructions below:
 
 ```bash
-$ bash aws_check_integrity.sh -l <local_path> -b <bucket_name> -p <aws_profile>
+$ bash aws_check_integrity.sh [-l|--local <local_folder>] [-b|--bucket <bucket_name>] [-p|--profile <aws_profile>]\n
 
-* -l <local_path>: [required] local path containing the orginal files uploaded to AWS S3 that we want to test their integrity. Example: -l /data/nucCyt/. 
-* -b <bucket_name>: [required] the name of the S3 bucket containing the files that we want to check their integrity. Example: -b nuccyt. 
-* -p <aws_profile>: [optional] in case the authentication to AWS has been done using SSO, indicate the aws profile
+Options:
+* -l|--local    <local_folder>  [required] Path to a local folder containing the original version of the files uploaded to Amazon S3. Example: -l /data/nucCyt/raw_data/
+* -b|--bucket   <bucket_name>   [required] Amazon S3 bucket containing the files uploaded from the local folder '-l <local_folder>'. Example: -b nuccyt
+* -p|--profile  <aws_profile>   [optional] AWS profile in case the user has logged in using the command *aws configure sso*. Example: -p my_aws_profile
+* -h|--help                     [optional] Shows further help options "
+
 ```
-
 
 ## Description
 
@@ -69,9 +61,9 @@ The **aws_check_integrity.sh** bash script does:
 
 2. Checks that the user has authenticated on AWS and that it has read permissions over the files of the bucket indicated.
 
-3. Connects to the bucket '-b <bucket>' and reads the metadata of all the objects it stores.
+3. Connects to the bucket '-b|--bucket <bucket_name>' and reads the metadata of all the objects it stores.
 
-4. Per each file found in the local folder indicated 'l <local_folder>', the script checks its size (in case the object found is a directory, it will loop within it until finding a file):
+4. Per each file found in the local folder indicated 'l|--local <local_folder>', the script checks its size (in case the object found is a directory, it will loop within it until finding a file):
 
    * If the size of the file found is smaller than 8MG, this tool will generate a simple MD5 digest value.
    * If the size of the file found is bigger than 8MG, this tool will make a request to the [s3md5](https://github.com/antespi/s3md5) function (author: [Antonio Espinosa](https://github.com/antespi)) which will apply the same algorithm as AWS does: it will (1) split the file into smaller 8MG chunks, (2) generate the MD5 hash corresponding to each file chunk and (3) generate a final MD5 digest number by combining the set of individual MD5 hashes, namely ETag number.
@@ -84,7 +76,7 @@ The **aws_check_integrity.sh** bash script does:
 ## Example
 
 ```sh
-$ bash aws_check_integrity.sh -l /data/nucCyt/ -b nuccyt -p my_aws_profile
+$ bash aws_check_integrity.sh --local /data/nucCyt/ --bucket nuccyt --profile my_aws_profile
 ```
 
 ## Supported platforms
