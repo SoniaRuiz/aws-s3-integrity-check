@@ -158,7 +158,7 @@ echo "Log filename: " "$log_file"
 ## RECIEVE FROM AWS ALL ETAG VALUES AT ONCE ##
 ##############################################
 
-echo $(date "+%T Reading objects metadata from AWS...")
+echo $(date "+%T Reading objects metadata from Amazon S3 ...")
 
 aws_bucket_all_files="$(aws s3api list-objects --bucket "$bucket_name" --profile "$aws_profile" 2>&1)"
 
@@ -202,7 +202,7 @@ upload_s3() {
 		
 			## GET THE REMOTE AWS PATH CORRESPONDING TO THE LOCAL FILE
 			
-			file_name="${i#*//}"
+			file_name="$(basename -- $i)"
 
       ## CHECK WHETHER THE LOCAL FILE EXISTS ON AWS
       
@@ -242,8 +242,8 @@ upload_s3() {
         
         result=$(echo "$aws_bucket_all_files" | jq -r '.Contents[] | select((.ETag ==  "\"'$etag_value'\"") and (.Key | contains ("'$file_name'")) ) | .Key ' 2>&1)
         if [[ "$result" == "" ]]; then
-          echo $(date "+%T - ERROR: the ETag number for the file '$i' do not match. File potentially corrupt.") 
-          echo $(date "+%T - ERROR: the ETag number for the file '$i' do not match. File potentially corrupt.") >> "${log_file}"
+          echo $(date "+%T - ERROR: the ETag number for the file '$i' do not match. This file has been updated on Amazon S3 and its current remote version does not match its original version.") 
+          echo $(date "+%T - ERROR: the ETag number for the file '$i' do not match. This file has been updated on Amazon S3 and its current remote version does not match its original version.") >> "${log_file}"
         elif [[ "$result" == "*error*" ]]; then
           echo $(date "+%T - ERROR: '$result'.") 
           echo $(date "+%T - ERROR: '$result'.") >> "${log_file}"
