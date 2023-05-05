@@ -127,14 +127,24 @@ else
   RESULT="$(aws s3 ls --profile "$aws_profile" 2>&1)"
 fi 
 
-
-## Remove the first first "/" character if it exists
+## Check AWS response
 if [ "$RESULT" = "*error*" ]; then
   printf "\n"
-	echo "ERROR: It has not been possible to stablish connection with AWS.\n\nDid you forget to include '--profile your_aws_profile'?"
+	echo "ERROR: It has not been possible to stablish connection with AWS."
+	echo "  - Did you forget to include '--profile your_aws_profile'?"
+	echo "  - Did you forget to mount the folder containig the AWS credentials?"
+	echo "$RESULT"
 	printf "\n"
 	print_aws_login
   exit 1
+elif [[ "$RESULT" == *"could not be found"* ]]; then
+  printf "\n"
+	echo "ERROR: It has not been possible to stablish connection with AWS."
+	echo "  - Did you forget to include '--profile your_aws_profile'?"
+	echo "  - Did you forget to mount the folder containig the AWS credentials?"
+	echo "$RESULT"
+	printf "\n"
+  exit -1
 fi
 
 

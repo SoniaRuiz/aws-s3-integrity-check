@@ -1,8 +1,8 @@
-FROM ubuntu:bionic
+FROM ubuntu:18.04
 
 LABEL maintainer="SoniaGR <s.ruiz@ucl.ac.uk>"
 
-RUN apt-get update && apt-get install -y --no-install-recommends
+RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing
 
 ## Install the jq dependency (used to process JSON metadata)
 RUN apt-get install -y jq
@@ -10,9 +10,14 @@ RUN apt-get install -y jq
 ## Install the xxd dependency (used to convert to hexadecimal notation)
 RUN apt-get install -y xxd
 
-## Copy and RUN the AWS CLI installer dependency (used to communicate with AWS)
-COPY ./aws /usr/src/aws
-RUN /usr/src/aws/install
+RUN apt-get clean 
+RUN apt-get install -y curl
+RUN apt-get install -y unzip
+
+## Install the AWS CLI dependency (used to interact with AWS services)
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
 
 ## Copy and RUN the s3md5 tool dependency (used to calculate ETag number of file multiparts)
 RUN mkdir /usr/src/s3md5
