@@ -1,0 +1,7 @@
+16:22:16 - CORRECT: TF-Prioritizer-master.zip - file_size: 3.7M - Local ETag: 857b64dd21ced2932ac31b3de709f898
+16:22:16 - CORRECT: cancer_atacSeq_config.json - file_size: 2.3K - Local ETag: 73cf2ee1a76b5dfa7ce7d5bc0f36eb59
+16:22:16 - CORRECT: cancer_chipSeq_config.json - file_size: 2.2K - Local ETag: 71c884d71b6ec001d3620b1208d50ff6
+16:22:16 - CORRECT: cancer_dnaseSeq_config.json - file_size: 2.3K - Local ETag: f76a3f20b4991581067a37fc7c25509f
+16:22:16 - CORRECT: mouse_chipSeq_config.json - file_size: 2.6K - Local ETag: 2bd86f17c89eff47b239ad84ae46b28d
+16:22:16 - CORRECT: readme_102379.txt - file_size: 3.6K - Local ETag: 4573e1b388076d329be55aa191202310
+16:22:16 - FILE PROCESSING FINISHED! 3.7M processed.

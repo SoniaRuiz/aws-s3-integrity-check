@@ -40,7 +40,7 @@ dir_path=$(dirname $path)
 ######################################
 ## Receive and evaluate parameters
 ######################################
-
+printf "\n"
 local_folder=""
 bucket_name=""
 aws_profile=""
@@ -242,14 +242,14 @@ upload_s3() {
         
         result=$(echo "$aws_bucket_all_files" | jq -r '.Contents[] | select((.ETag ==  "\"'$etag_value'\"") and (.Key | contains ("'$file_name'")) ) | .Key ' 2>&1)
         if [[ "$result" == "" ]]; then
-          echo $(date "+%T - ERROR: the ETag number for the file '$i' do not match. File potentially corrupt.") 
-          echo $(date "+%T - ERROR: the ETag number for the file '$i' do not match. File potentially corrupt.") >> "${log_file}"
+          echo $(date "+%T - ERROR: the ETag number for the file '$file_name' does not match. The local version of this file does not match its remote version on Amazon S3.") 
+          echo $(date "+%T - ERROR: the ETag number for the file '$file_name' does not match. The local version of this file does not match its remote version on Amazon S3.") >> "${log_file}"
         elif [[ "$result" == "*error*" ]]; then
           echo $(date "+%T - ERROR: '$result'.") 
           echo $(date "+%T - ERROR: '$result'.") >> "${log_file}"
         else
-          echo $(date "+%T - CORRECT: $file_name - file_size: $file_size_HR ")
-          echo $(date "+%T - CORRECT: $file_name - file_size: $file_size_HR ") >> "${log_file}"
+          echo $(date "+%T - CORRECT: $file_name - file_size: $file_size_HR")
+          echo $(date "+%T - CORRECT: $file_name - file_size: $file_size_HR - Local ETag: $etag_value") >> "${log_file}"
         fi
         
       fi

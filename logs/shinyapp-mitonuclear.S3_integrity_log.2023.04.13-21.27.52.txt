@@ -1,7 +1,0 @@
-21:27:59 - ERROR: the ETag number for the file '/home/abrowne/shiny/MitoNuclearCOEXPlorer_additional_files/data//GTEx_brain_summary_table.csv' do not match. The remote version of this file has changed.
-21:28:00 - CORRECT: GTEx_brain_summary_table.fst - file_size: 37M
-21:28:00 - ERROR: the ETag number for the file '/home/abrowne/shiny/MitoNuclearCOEXPlorer_additional_files/data//GTEx_control_tissues_summary_table.csv' do not match. The remote version of this file has changed.
-21:28:00 - CORRECT: GTEx_control_tissues_summary_table.fst - file_size: 6.8M
-21:28:00 - FILE NOT FOUND: file '/home/abrowne/shiny/MitoNuclearCOEXPlorer_additional_files/data//grch3897.fst' not found within the Amazon S3 bucket 'shinyapp-mitonuclear'.
-21:28:00 - ERROR: the ETag number for the file '/home/abrowne/shiny/MitoNuclearCOEXPlorer_additional_files/data//grch3897_small.fst' do not match. The remote version of this file has changed.
-21:28:00 - FILE PROCESSING FINISHED! 196M processed.
