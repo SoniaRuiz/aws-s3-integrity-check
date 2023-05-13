@@ -127,14 +127,24 @@ else
   RESULT="$(aws s3 ls --profile "$aws_profile" 2>&1)"
 fi 
 
-
-## Remove the first first "/" character if it exists
+## Check AWS response
 if [ "$RESULT" = "*error*" ]; then
   printf "\n"
-	echo "ERROR: It has not been possible to stablish connection with AWS.\n\nDid you forget to include '--profile your_aws_profile'?"
+	echo "ERROR: It has not been possible to stablish connection with AWS."
+	echo "  - Did you forget to include '--profile your_aws_profile'?"
+	echo "  - Did you forget to mount the folder containig the AWS credentials?"
+	echo "$RESULT"
 	printf "\n"
 	print_aws_login
   exit 1
+elif [[ "$RESULT" == *"could not be found"* ]]; then
+  printf "\n"
+	echo "ERROR: It has not been possible to stablish connection with AWS."
+	echo "  - Did you forget to include '--profile your_aws_profile'?"
+	echo "  - Did you forget to mount the folder containig the AWS credentials?"
+	echo "$RESULT"
+	printf "\n"
+  exit -1
 fi
 
 
@@ -158,7 +168,7 @@ echo "Log filename: " "$log_file"
 ## RECIEVE FROM AWS ALL ETAG VALUES AT ONCE ##
 ##############################################
 
-echo $(date "+%T Reading objects metadata from AWS...")
+echo $(date "+%T Reading objects metadata from Amazon S3 ...")
 
 aws_bucket_all_files="$(aws s3api list-objects --bucket "$bucket_name" --profile "$aws_profile" 2>&1)"
 
@@ -202,7 +212,7 @@ upload_s3() {
 		
 			## GET THE REMOTE AWS PATH CORRESPONDING TO THE LOCAL FILE
 			
-			file_name="${i#*//}"
+			file_name="$(basename -- $i)"
 
       ## CHECK WHETHER THE LOCAL FILE EXISTS ON AWS
       
@@ -242,8 +252,13 @@ upload_s3() {
         
         result=$(echo "$aws_bucket_all_files" | jq -r '.Contents[] | select((.ETag ==  "\"'$etag_value'\"") and (.Key | contains ("'$file_name'")) ) | .Key ' 2>&1)
         if [[ "$result" == "" ]]; then
+<<<<<<< HEAD
           echo $(date "+%T - ERROR: the ETag number for the file '$file_name' does not match. The local version of this file does not match its remote version on Amazon S3.") 
           echo $(date "+%T - ERROR: the ETag number for the file '$file_name' does not match. The local version of this file does not match its remote version on Amazon S3.") >> "${log_file}"
+=======
+          echo $(date "+%T - ERROR: the ETag number for the file '$i' do not match. This file has been updated on Amazon S3 and its current remote version does not match its original version.") 
+          echo $(date "+%T - ERROR: the ETag number for the file '$i' do not match. This file has been updated on Amazon S3 and its current remote version does not match its original version.") >> "${log_file}"
+>>>>>>> 11342823fe7593fe0f5dc27c2c492a998701a2d2
         elif [[ "$result" == "*error*" ]]; then
           echo $(date "+%T - ERROR: '$result'.") 
           echo $(date "+%T - ERROR: '$result'.") >> "${log_file}"
