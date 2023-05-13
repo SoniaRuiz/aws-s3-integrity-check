@@ -252,13 +252,10 @@ upload_s3() {
         
         result=$(echo "$aws_bucket_all_files" | jq -r '.Contents[] | select((.ETag ==  "\"'$etag_value'\"") and (.Key | contains ("'$file_name'")) ) | .Key ' 2>&1)
         if [[ "$result" == "" ]]; then
-<<<<<<< HEAD
+
           echo $(date "+%T - ERROR: the ETag number for the file '$file_name' does not match. The local version of this file does not match its remote version on Amazon S3.") 
           echo $(date "+%T - ERROR: the ETag number for the file '$file_name' does not match. The local version of this file does not match its remote version on Amazon S3.") >> "${log_file}"
-=======
-          echo $(date "+%T - ERROR: the ETag number for the file '$i' do not match. This file has been updated on Amazon S3 and its current remote version does not match its original version.") 
-          echo $(date "+%T - ERROR: the ETag number for the file '$i' do not match. This file has been updated on Amazon S3 and its current remote version does not match its original version.") >> "${log_file}"
->>>>>>> 11342823fe7593fe0f5dc27c2c492a998701a2d2
+
         elif [[ "$result" == "*error*" ]]; then
           echo $(date "+%T - ERROR: '$result'.") 
           echo $(date "+%T - ERROR: '$result'.") >> "${log_file}"
