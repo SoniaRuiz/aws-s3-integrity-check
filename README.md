@@ -72,27 +72,37 @@ Options:
 
 ```
 
-
-
-
 ## Example
 
 ```sh
 $ bash aws_check_integrity.sh --local /data/nucCyt/ --bucket nuccyt --profile my_aws_profile
 ```
 
-## Supported platforms
+## Limitations
 
-This bash tool has been successfully tested on:
+This tool presents the following limitations:
+
+* The user has to have read/write access to an Amazon S3 bucket.
+* If the user chooses to transfer its files to an Amazon S3 bucket using any of the *aws s3* transfer commands available, this tool requires the user not to change any of the default values for the arguments multipart_threshold and multipart_chunksize. Both the file size threshold for the file multipart upload and the default multipart chunk size must remain at the default 8 MB values.
+* Third, this tool requires that the user selects JavaScript Object Notation (JSON) as the preferred text-output format during the AWS authentication process.
+* Fourth, this tool requires that all remote files tested were uploaded to Amazon S3 using the SSE-S3 server-side encryption type.
+* Fifth, although the Dockerized version of this tool has been created to remove the OS dependency, the bash version of this tool can only be run on Ubuntu and CentOS distributions.
+* The Dockerized version of this tool requires three extra arguments to mount three local folders required by the Docker image, which may increase the complexity of using this tool.
+
+## Docker image
+
+To remove the OS dependency, this tool has been made available in a Docker format. The details regarding how to download and run the Dockerised version of the *aws-s3-integrity-check* bash tool can be found on DockerHub [here](https://hub.docker.com/r/soniaruiz/aws-s3-integrity-check).
+
+## Testing
+
+The bash and Docker versions of this tool have been successfully tested on the following Ubuntu and CentOS versions:
 
 * Ubuntu 16.04.6 LTS (Xenial Xerus)
 * Ubuntu 22.04.2 LTS (Jammy Jellyfish)
 
-## Data Availability
+## Additional Resources
 
-This tool is available on:
-
-* protocols.io
+* protocols.io [https://www.protocols.io/view/check-the-integrity-of-a-dataset-stored-on-amazon-n92ld9qy9g5b/v2](https://www.protocols.io/view/check-the-integrity-of-a-dataset-stored-on-amazon-n92ld9qy9g5b/v2)
 * DockerHub: [https://hub.docker.com/r/soniaruiz/aws-s3-integrity-check](https://hub.docker.com/r/soniaruiz/aws-s3-integrity-check)
 
 ## AUTHOR
