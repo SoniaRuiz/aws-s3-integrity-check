@@ -2,17 +2,13 @@ FROM ubuntu:18.04
 
 LABEL maintainer="SoniaGR <s.ruiz@ucl.ac.uk>"
 
-RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing
-
-## Install the jq dependency (used to process JSON metadata)
-RUN apt-get install -y jq
-
-## Install the xxd dependency (used to convert to hexadecimal notation)
-RUN apt-get install -y xxd
-
-RUN apt-get clean 
-RUN apt-get install -y curl
-RUN apt-get install -y unzip
+RUN apt-get update && apt-get install -y \ 
+  --no-install-recommends \
+  --fix-missing \
+  jq \
+  xxd \
+  curl \
+  unzip
 
 ## Install the AWS CLI dependency (used to interact with AWS services)
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
