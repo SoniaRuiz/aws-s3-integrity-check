@@ -100,9 +100,7 @@ The bash and Docker versions of this tool have been successfully tested on the f
 * Ubuntu 16.04.6 LTS (Xenial Xerus)
 * Ubuntu 22.04.2 LTS (Jammy Jellyfish)
 
-## Data Availability
-
-This tool is available on:
+## Additional Resources
 
 * protocols.io [https://www.protocols.io/view/check-the-integrity-of-a-dataset-stored-on-amazon-n92ld9qy9g5b/v2](https://www.protocols.io/view/check-the-integrity-of-a-dataset-stored-on-amazon-n92ld9qy9g5b/v2)
 * DockerHub: [https://hub.docker.com/r/soniaruiz/aws-s3-integrity-check](https://hub.docker.com/r/soniaruiz/aws-s3-integrity-check)
