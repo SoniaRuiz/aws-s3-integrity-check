@@ -72,9 +72,9 @@ usage() {
     \t\t-h|--help                     [optional] Shows further help options 
     
   LIMITATIONS:\n
-    \t* The aws-s3-integrity-check tool establishes in 8 MB both the file size threshold for ETag number calculation and the default multipart chunk size. 8MB is the default value established by Amazon (see: https://docs.aws.amazon.com/cli/latest/topic/s3-config.html). If the remote files were uploaded to Amazon S3 by chosing a different chunk size, this integrity testing tool will not work properly.
-    \t* This tool requires all remote files to be uploaded to Amazon S3 by using the default SSE-S3 server-side encryption type.\n\n"
-    exit 1
+    \t* The aws-s3-integrity-check tool establishes in 8 MB both the file size threshold for ETag number calculation and the default multipart chunk size. 8 MB is the default value established by Amazon (see: https://docs.aws.amazon.com/cli/latest/topic/s3-config.html). If the remote files were uploaded to Amazon S3 by chosing a different chunk size, this integrity testing tool will not work properly.
+    \t* This tool requires all remote files tested to be uploaded to Amazon S3 by using the default SSE-S3 server-side encryption type.\n\n"
+    
 }
 
 
@@ -103,21 +103,27 @@ done
 
 if [ $OPTIND -eq 1 ]; then 
   printf "\n"
-	echo "ERROR: The arguments '-l <local_path>' and '-b <bucket_name>' are required!"
-	usage 
+	echo "ERROR: The arguments '-l <local_path>' and '-b <bucket_name>' are required!" 
+	echo "\nTry '--help' for more detailed info."
+	#usage 
+	exit 1
 elif [ "$local_folder" = '' ]; then
 	printf "\n"
-	echo "ERROR: The argument '-l' or '--local' is required!"
-	usage
+	echo "ERROR: The argument '-l' or '--local' is required!" 
+	echo "\nTry '--help' for more detailed info."
+	#usage
+	exit 1
 elif [ ! -d "$local_folder" ]; then
 	printf "\n"
-	echo "ERROR. No such directory exist: $local_folder"
-	printf "\n"
-	usage
+	echo "ERROR. No such directory exist: $local_folder" 
+	echo "\nTry '--help' for more detailed info."
+	#usage
+	exit 1
 elif [ "$bucket_name" = '' ]; then
 	printf "\n"
-	echo "ERROR: The argument '-b' or '--bucket' is required!"
-	usage 
+	echo "ERROR: The argument '-b' or '--bucket' is required!" 
+	#usage 
+	exit 1
 fi
 
 ####################################################################
@@ -264,7 +270,7 @@ upload_s3() {
           printf "\n%s $(date +%H.%M.%S) - ERROR: %s $result." >> "${log_file}"
         else
           printf "\n%s $(date +%H.%M.%S) - CORRECT: %s $file_name. File_size: $file_size_HR"
-          printf "\n%s $(date +%H.%M.%S) - CORRECT: %s $file_name. File_size: $file_size_HR" >> "${log_file}"
+          printf "\n%s $(date +%H.%M.%S) - CORRECT: %s $file_name. File_size: $file_size_HR. Etag: $etag_value." >> "${log_file}"
         fi
         
       fi
@@ -282,3 +288,4 @@ fi
 
 total_file_size_processed_HR=$(echo "$total_file_size_processed" | numfmt --to=iec)
 printf '\n%s' "$(date +%H.%M.%S)" ' - FILE PROCESSING FINISHED!' "$total_file_size_processed_HR" 'processed.' >> "${log_file}"
+exit 0

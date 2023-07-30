@@ -5,6 +5,7 @@ LABEL maintainer="SoniaGR <s.ruiz@ucl.ac.uk>"
 RUN apt-get update && apt-get install -y \ 
   --no-install-recommends \
   --fix-missing \
+  ca-certificates \
   jq \
   xxd \
   curl \
