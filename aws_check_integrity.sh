@@ -104,19 +104,19 @@ done
 if [ $OPTIND -eq 1 ]; then 
   printf "\n"
 	echo "ERROR: The arguments '-l <local_path>' and '-b <bucket_name>' are required!" 
-	echo "\nTry '--help' for more detailed info."
+	printf "\nTry '--help' for more detailed info."
 	#usage 
 	exit 1
 elif [ "$local_folder" = '' ]; then
 	printf "\n"
 	echo "ERROR: The argument '-l' or '--local' is required!" 
-	echo "\nTry '--help' for more detailed info."
+	printf "\nTry '--help' for more detailed info."
 	#usage
 	exit 1
 elif [ ! -d "$local_folder" ]; then
 	printf "\n"
 	echo "ERROR. No such directory exist: $local_folder" 
-	echo "\nTry '--help' for more detailed info."
+	printf "\nTry '--help' for more detailed info."
 	#usage
 	exit 1
 elif [ "$bucket_name" = '' ]; then
@@ -212,8 +212,19 @@ upload_s3() {
 	## Loop through the files from the local folder
 	################################################
 
+#while IFS= read -r -d '' file
+#do
+#  if [ -f "$file" ]; then
+		
+			## GET THE REMOTE AWS PATH CORRESPONDING TO THE LOCAL FILE
+			
+#			file_name="$(basename -- "$file")"
+#			echo "$file_name"
+#	fi
+#done <   <(find "$local_folder"/* -type f -print0)
 
-	for i in $(find "$local_folder"/* -type f -print)
+
+	while IFS= read -r -d '' i #for i in $(find "$local_folder"/* -type f -print)
 	do
 	
 	  ## THE LOCAL OBJECT IS A FILE
@@ -262,20 +273,20 @@ upload_s3() {
         result=$(echo "$aws_bucket_all_files" | jq -r '.Contents[] | select((.ETag ==  "\"'"$etag_value"'\"") and (.Key | contains ("'"$file_name"'")) ) | .Key ' 2>&1)
         if [[ "$result" == "" ]]; then
 
-          printf "\n%s $(date +%H.%M.%S) - ERROR: the ETag number for the file %s $file_name does not match. The local version of this file does not match its remote version on Amazon S3." 
-          printf "\n%s $(date +%H.%M.%S) - ERROR: the ETag number for the file %s $file_name does not match. The local version of this file does not match its remote version on Amazon S3." >> "${log_file}"
+          printf "%s $(date +%H.%M.%S) - ERROR: the ETag number for the file %s $file_name does not match. The local version of this file does not match its remote version on Amazon S3.\n" 
+          printf "%s $(date +%H.%M.%S) - ERROR: the ETag number for the file %s $file_name does not match. The local version of this file does not match its remote version on Amazon S3.\n" >> "${log_file}"
 
         elif [[ "$result" == "*error*" ]]; then
-          printf "\n%s $(date +%H.%M.%S) - ERROR: %s $result."
-          printf "\n%s $(date +%H.%M.%S) - ERROR: %s $result." >> "${log_file}"
+          printf "%s $(date +%H.%M.%S) - ERROR: %s $result.\n"
+          printf "%s $(date +%H.%M.%S) - ERROR: %s $result.\n" >> "${log_file}"
         else
-          printf "\n%s $(date +%H.%M.%S) - CORRECT: %s $file_name. File_size: $file_size_HR"
-          printf "\n%s $(date +%H.%M.%S) - CORRECT: %s $file_name. File_size: $file_size_HR. Etag: $etag_value." >> "${log_file}"
+          printf "%s $(date +%H.%M.%S) - CORRECT: %s '$file_name' | File_size: $file_size_HR\n"
+          printf "%s $(date +%H.%M.%S) - CORRECT: %s '$file_name' | File_size: $file_size_HR  | Etag: $etag_value.\n" >> "${log_file}"
         fi
         
       fi
       fi
-      done
+  done <   <(find "$local_folder"/* -type f -print0)
 }
 
 ## Request the function

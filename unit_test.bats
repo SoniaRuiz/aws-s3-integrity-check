@@ -40,16 +40,18 @@
 
 }
 
-@test "mass-spectrometry-imaging" {
+@test "testing integrity of the Amazon S3 bucket 'mass-spectrometry-imaging'" {
 
   run bash aws_check_integrity.sh --local ./102374-Image/ftp.cngb.org/pub/gigadb/pub/10.5524/102001_103000/102374/ --bucket mass-spectrometry-imaging --profile sruiz
   [ "$status" -eq 0 ]
+  
 }
 
-@test "mass-spectrometry-imaging" {
+@test "testing integrity of the Amazon S3 bucket 'rnaseq-pd'" {
 
-  run bash aws_check_integrity.sh --local ./ukbec/ --bucket ukbec-unaligned-fastq --profile sruiz
+  run bash aws_check_integrity.sh --local /data/RNAseq_PD/ --bucket rnaseq-pd --profile sruiz
   [ "$status" -eq 0 ]
+  
 }
 
 
