@@ -82,23 +82,29 @@ $ bash aws_check_integrity.sh --local /data/nucCyt/ --bucket nuccyt --profile my
 
 This tool presents the following limitations:
 
-* The user has to have read/write access to an Amazon S3 bucket.
-* If the user chooses to transfer its files to an Amazon S3 bucket using any of the *aws s3* transfer commands available, this tool requires the user not to change any of the default values for the arguments multipart_threshold and multipart_chunksize. Both the file size threshold for the file multipart upload and the default multipart chunk size must remain at the default 8 MB values.
-* Third, this tool requires that the user selects JavaScript Object Notation (JSON) as the preferred text-output format during the AWS authentication process.
-* Fourth, this tool requires that all remote files tested were uploaded to Amazon S3 using the SSE-S3 server-side encryption type.
-* Fifth, although the Dockerized version of this tool has been created to remove the OS dependency, the bash version of this tool can only be run on Ubuntu and CentOS distributions.
+* The user has to have read/write access to an Amazon S3 bucket. 
+* This tool requires that the user selects JavaScript Object Notation (JSON) as the preferred text-output format during the AWS authentication process.
+* The aws-s3-integrity-check tool is only expected to work for files that have been uploaded to Amazon S3 by using any of the aws s3 transfer commands available (i.e. cp, sync, mv, and rm) with all the configuration parameters set to default values (including multipart_threshold and multipart_chunksize); it is essential that the file size threshold for the file multipart upload and the default multipart chunk size remain at the default 8 MB values.
+* The bash version of this tool is only expected to work across Linux distributions.
 * The Dockerized version of this tool requires three extra arguments to mount three local folders required by the Docker image, which may increase the complexity of using this tool.
 
 ## Docker image
 
-To remove the OS dependency, this tool has been made available in a Docker format. The details regarding how to download and run the Dockerised version of the *aws-s3-integrity-check* bash tool can be found on DockerHub [here](https://hub.docker.com/r/soniaruiz/aws-s3-integrity-check).
+To remove the OS dependency, this tool has been made available within a Docker format. The details regarding how to download, run and use the Dockerised version of the '*aws-s3-integrity-check*' bash tool can be found on DockerHub [here](https://hub.docker.com/r/soniaruiz/aws-s3-integrity-check).
 
 ## Testing
 
-The bash and Docker versions of this tool have been successfully tested on the following Ubuntu and CentOS versions:
+The aws-s3-integrity-check tool is expected to work only across Linux distributions. With this in mind, testing was successfully performed on the following Ubuntu versions:
 
 * Ubuntu 16.04.6 LTS (Xenial Xerus)
 * Ubuntu 22.04.2 LTS (Jammy Jellyfish)
+
+## Support 
+
+This aws-s3-integrity-check GitHub repository allows recording new issues and submitting tested pull requests for review. Issues on this repository have been configured to create triaged and labelled entries by choosing between the **Bug report** or **Feature request** categories, ultimately facilitating the creation and submission of issues.
+
+The *aws-s3-integrity-check* tool relies on the s3md5 bash script (version 1.2, https://github.com/antespi/s3md5) to function. To ensure the availability and maintenance of the s3md5 bash script to the users of the *aws-s3-integrity-check* tool, the [source s3md5](https://github.com/antespi/s3md5) GitHub repository has been forked and made available at https://github.com/SoniaRuiz/s3md5. Any potential issues emerging on the s3md5 bash script that may affect the core and correct function of the aws-s3-integrity-check tool can be submitted via the Issues tab of the [forked s3md5](https://github.com/SoniaRuiz/s3md5/issues) repository. Any created issue will be triaged, maintained and fixed on the forked GitHub repository before being submitted via a pull request to the project owner.
+
 
 ## Additional Resources
 

@@ -40,11 +40,26 @@
 
 }
 
+@test "Docker image: testing integrity of the Amazon S3 bucket 'tf-prioritizer'..." {
+
+  run docker run -v /home/sruiz/PROJECTS/aws-s3-integrity-check/102379-TF:/home/sruiz/PROJECTS/aws-s3-integrity-check/102379-TF -v "$PWD/logs:/usr/src/logs" -v "$HOME/.aws:/root/.aws:ro" soniaruiz/aws-s3-integrity-check:latest -l /home/sruiz/PROJECTS/aws-s3-integrity-check/102379-TF -b tf-prioritizer --profile sruiz
+  [ "$status" -eq 0 ]
+
+}
+
+
 @test "testing integrity of the Amazon S3 bucket 'mass-spectrometry-imaging'" {
 
   run bash aws_check_integrity.sh --local ./102374-Image/ftp.cngb.org/pub/gigadb/pub/10.5524/102001_103000/102374/ --bucket mass-spectrometry-imaging --profile sruiz
   [ "$status" -eq 0 ]
   
+}
+
+@test "Docker image: testing integrity of the Amazon S3 bucket 'mass-spectrometry-imaging'..." {
+
+  run docker run -v /home/sruiz/PROJECTS/aws-s3-integrity-check/102374-Image/ftp.cngb.org/pub/gigadb/pub/10.5524/102001_103000/102374:/home/sruiz/PROJECTS/aws-s3-integrity-check/102374-Image/ftp.cngb.org/pub/gigadb/pub/10.5524/102001_103000/102374 -v "$PWD/logs:/usr/src/logs" -v "$HOME/.aws:/root/.aws:ro" soniaruiz/aws-s3-integrity-check:latest -l /home/sruiz/PROJECTS/aws-s3-integrity-check/102374-Image/ftp.cngb.org/pub/gigadb/pub/10.5524/102001_103000/102374 -b mass-spectrometry-imaging --profile sruiz
+  [ "$status" -eq 0 ]
+
 }
 
 @test "testing integrity of the Amazon S3 bucket 'rnaseq-pd'" {
@@ -54,6 +69,31 @@
   
 }
 
+@test "Docker image: testing integrity of the Amazon S3 bucket 'rnaseq-pd'..." {
+
+  run docker run -v /data/RNAseq_PD:/data/RNAseq_PD -v "$PWD/logs:/usr/src/logs" -v "$HOME/.aws:/root/.aws:ro" soniaruiz/aws-s3-integrity-check:latest -l /data/RNAseq_PD -b rnaseq-pd --profile sruiz
+  [ "$status" -eq 0 ]
+
+}
+
+
+
+
+
+
+@test "testing integrity of the Amazon S3 bucket 'ukbec'" {
+
+  run bash aws_check_integrity.sh --local ./ukbec/ --bucket ukbec-unaligned-fastq --profile sruiz
+  [ "$status" -eq 0 ]
+  
+}
+
+@test "Docker image: testing integrity of the Amazon S3 bucket 'ukbec'..." {
+
+  run docker run -v /home/sruiz/PROJECTS/aws-s3-integrity-check/ukbec:/home/sruiz/PROJECTS/aws-s3-integrity-check/ukbec -v "$PWD/logs:/usr/src/logs" -v "$HOME/.aws:/root/.aws:ro" soniaruiz/aws-s3-integrity-check:latest -l /home/sruiz/PROJECTS/aws-s3-integrity-check/ukbec -b ukbec --profile sruiz
+  [ "$status" -eq 0 ]
+
+}
 
 
 

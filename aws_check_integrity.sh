@@ -44,6 +44,7 @@ printf "\n"
 local_folder=""
 bucket_name=""
 aws_profile=""
+help=""
 
 print_aws_login() {
   printf "\n
@@ -72,8 +73,8 @@ usage() {
     \t\t-h|--help                     [optional] Shows further help options 
     
   LIMITATIONS:\n
-    \t* The aws-s3-integrity-check tool establishes in 8 MB both the file size threshold for ETag number calculation and the default multipart chunk size. 8 MB is the default value established by Amazon (see: https://docs.aws.amazon.com/cli/latest/topic/s3-config.html). If the remote files were uploaded to Amazon S3 by chosing a different chunk size, this integrity testing tool will not work properly.
-    \t* This tool requires all remote files tested to be uploaded to Amazon S3 by using the default SSE-S3 server-side encryption type.\n\n"
+    \t* The 'aws-s3-integrity-check' tool is only expected to work for files that have been uploaded to Amazon S3 by using any of the aws s3 transfer commands available (i.e. cp, sync, mv, and rm) with all the configuration parameters set to default values (including multipart_threshold and multipart_chunksize); it is essential that the file size threshold for the file multipart upload and the default multipart chunk size remain at the default 8 MB values (see: https://docs.aws.amazon.com/cli/latest/topic/s3-config.html). 
+    \t* The 'aws_check_integrity.sh' bash script is only expected to work across Linux distributions.\n\n"
     
 }
 
@@ -97,16 +98,15 @@ while getopts "l:b:p:h" arg; do
     l) local_folder=$OPTARG;;
     b) bucket_name=$OPTARG;;
     p) aws_profile=$OPTARG;;
+    h) help="help";;
     ?) usage ;;
   esac
 done
 
-if [ $OPTIND -eq 1 ]; then 
-  printf "\n"
-	echo "ERROR: The arguments '-l <local_path>' and '-b <bucket_name>' are required!" 
-	printf "\nTry '--help' for more detailed info."
-	#usage 
-	exit 1
+
+if [ ! "$help" = '' ]; then
+  usage
+  exit 0
 elif [ "$local_folder" = '' ]; then
 	printf "\n"
 	echo "ERROR: The argument '-l' or '--local' is required!" 
@@ -212,19 +212,7 @@ upload_s3() {
 	## Loop through the files from the local folder
 	################################################
 
-#while IFS= read -r -d '' file
-#do
-#  if [ -f "$file" ]; then
-		
-			## GET THE REMOTE AWS PATH CORRESPONDING TO THE LOCAL FILE
-			
-#			file_name="$(basename -- "$file")"
-#			echo "$file_name"
-#	fi
-#done <   <(find "$local_folder"/* -type f -print0)
-
-
-	while IFS= read -r -d '' i #for i in $(find "$local_folder"/* -type f -print)
+	while IFS= read -r -d '' i 
 	do
 	
 	  ## THE LOCAL OBJECT IS A FILE
@@ -239,8 +227,8 @@ upload_s3() {
       result=$(echo "$aws_bucket_all_files" | jq -r '.Contents[] | select((.Key | contains ("'"$file_name"'")) ) | .Key ' 2>&1)
       
       if [[ "$result" == "" ]]; then
-        printf "\n%s $(date +%H.%M.%S) - FILE NOT FOUND: file %s $i not found within the Amazon S3 bucket %s $bucket_name."
-        printf "\n%s $(date +%H.%M.%S) - FILE NOT FOUND: file %s $i not found within the Amazon S3 bucket %s $bucket_name." >> "${log_file}"
+        printf "%s $(date +%H.%M.%S) - FILE NOT FOUND: file %s $i not found within the Amazon S3 bucket %s $bucket_name.\n"
+        printf "%s $(date +%H.%M.%S) - FILE NOT FOUND: file %s $i not found within the Amazon S3 bucket %s $bucket_name.\n" >> "${log_file}"
       else
       
         ## CALCULATE THE ETAG VALUE FOR THE LOCAL FILE
@@ -257,7 +245,7 @@ upload_s3() {
   	    ## Let the user know in case the file is too large
   	    file_size_HR=$(echo "$file_size" | numfmt --to=iec)
   			if [ "$file_size" -gt 500000000 ]; then
-  			  printf "\nCalculating the ETag value for a large file: %s $file_size_HR ..." 
+  			  printf "Calculating the ETag value for a large file: %s $file_size_HR ...\n" 
   			fi
   			
   			## Calculate the ETag value
@@ -273,8 +261,8 @@ upload_s3() {
         result=$(echo "$aws_bucket_all_files" | jq -r '.Contents[] | select((.ETag ==  "\"'"$etag_value"'\"") and (.Key | contains ("'"$file_name"'")) ) | .Key ' 2>&1)
         if [[ "$result" == "" ]]; then
 
-          printf "%s $(date +%H.%M.%S) - ERROR: the ETag number for the file %s $file_name does not match. The local version of this file does not match its remote version on Amazon S3.\n" 
-          printf "%s $(date +%H.%M.%S) - ERROR: the ETag number for the file %s $file_name does not match. The local version of this file does not match its remote version on Amazon S3.\n" >> "${log_file}"
+          printf "%s $(date +%H.%M.%S) - ERROR: local and remote ETag numbers for the file %s '$file_name' do not match. Local ETag: $etag_value.\n" 
+          printf "%s $(date +%H.%M.%S) - ERROR: local and remote ETag numbers for the file %s '$file_name' do not match. Local ETag: $etag_value.\n" >> "${log_file}"
 
         elif [[ "$result" == "*error*" ]]; then
           printf "%s $(date +%H.%M.%S) - ERROR: %s $result.\n"
@@ -298,5 +286,5 @@ if [[ "$total_file_size_processed" == "" ]]; then
 fi
 
 total_file_size_processed_HR=$(echo "$total_file_size_processed" | numfmt --to=iec)
-printf '\n%s' "$(date +%H.%M.%S)" ' - FILE PROCESSING FINISHED!' "$total_file_size_processed_HR" 'processed.' >> "${log_file}"
+printf "%s $(date +%H.%M.%S) - FILE PROCESSING FINISHED! %s $total_file_size_processed_HR processed." >> "${log_file}"
 exit 0
