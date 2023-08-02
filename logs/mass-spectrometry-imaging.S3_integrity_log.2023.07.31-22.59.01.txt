@@ -1,0 +1,37 @@
+ 22.59.07 - CORRECT:  '102374.md5' | File_size: 3.1K  | Etag: 9666b6e2d043051d17e5307358561ad7.
+ 22.59.07 - CORRECT:  'DOME-Registry-Annotations.docx' | File_size: 14K  | Etag: b2b60f80d18e9b7cff99a1a9d3a2fd70.
+ 22.59.26 - CORRECT:  'OPTICAL_kidney.tif' | File_size: 2.6G  | Etag: 965e82c599f65a27d626e45b18e6cc4d-327.
+ 22.59.27 - CORRECT:  'OPTICAL_tumor.tif' | File_size: 175M  | Etag: a9cf1d8cad24a7db50f62f8cbf4f8270-22.
+ 22.59.44 - CORRECT:  'RAW_kidney.ibd' | File_size: 2.7G  | Etag: 55dcf9428f4604dd6e7e3fb1ea219741-335.
+ 23.00.19 - CORRECT:  'RAW_tumor.ibd' | File_size: 5.7G  | Etag: 0f55bac7276b35e12b9196a7738c454d-722.
+ 23.00.19 - CORRECT:  'PROCESSED_MS_IMAGE_DATA_tumor.imzML' | File_size: 8.0M  | Etag: 63f5e25eb6844e1ef679d6bb7e9b3e1e.
+ 23.00.20 - CORRECT:  'MS_IMAGE_DATA_tumor.imzml' | File_size: 96M  | Etag: e95fb4095f2cd1c8170113092da14127-12.
+ 23.00.20 - CORRECT:  'PROCESSED_tumor.ibd' | File_size: 1.3M  | Etag: 520681f1bcadc10404576be965713fe1.
+ 23.00.20 - CORRECT:  'PROCESSED_kidney.ibd' | File_size: 5.0M  | Etag: 10afdb819172277826b6186557ec5c15.
+ 23.00.20 - CORRECT:  'PROCESSED_MS_IMAGE_DATA_kidney.imzML' | File_size: 33M  | Etag: 24428c93c861875b4b59dbc4ac717f66-5.
+ 23.00.21 - CORRECT:  'MS_IMAGE_DATA_kidney.imzml' | File_size: 80M  | Etag: 8543a8e8fb5653d9502414c05691e204-10.
+ 23.00.21 - CORRECT:  'ROIforMSI-main.zip' | File_size: 1.6M  | Etag: 8ce97745c7dfc035dde4b1bff7b57d1a.
+ 23.00.21 - CORRECT:  'kidneyMapOfROIs.npy' | File_size: 177K  | Etag: 20dcd1f14bb7a7257ee30e6d58a03d33.
+ 23.00.21 - CORRECT:  'gui.py' | File_size: 61K  | Etag: cd58a28c012c6fe799e34befbcddd8c6.
+ 23.00.21 - CORRECT:  'Utilities.py' | File_size: 15K  | Etag: db4ddef6e3dff08ec346787760abe31d.
+ 23.00.21 - CORRECT:  'tumorMapOfROIs.npy' | File_size: 48K  | Etag: b2f8b715934b8f2d1ff78fdd89ca127b.
+ 23.00.21 - CORRECT:  'gui.cpython-37.pyc' | File_size: 38K  | Etag: aa3c69b353e252e54ee78585c0731d29.
+ 23.00.21 - CORRECT:  'TumorChannel2mz.npy' | File_size: 840  | Etag: 904d267f4ebbfdda2a40eba22f83e773.
+ 23.00.21 - CORRECT:  'MsiDataCube.npy' | File_size: 4.2M  | Etag: d1890c7398a374fa95599cc9c1a5390f.
+ 23.00.21 - CORRECT:  'KidneyHistomorphologicalFeaturesData.npy.npy' | File_size: 24M  | Etag: bd9d3c62743cbf9816107ea7b17651ee-3.
+ 23.00.21 - CORRECT:  'KidneyChannel2mz.npy' | File_size: 824  | Etag: d0f2f14e5fa13a9b14fcc9e28bf71af3.
+ 23.00.21 - CORRECT:  'registration_gui.py' | File_size: 4.9K  | Etag: c1d07a27cc343c6d6686101b099ccbd8.
+ 23.00.39 - CORRECT:  'KidneyHeImage.npy' | File_size: 2.6G  | Etag: c5ecc9598c6730e6db509a2e015f4ed1-327.
+ 23.00.45 - CORRECT:  'KidneyHeMask.npy' | File_size: 872M  | Etag: bfa869367ea2a19ad55da6323f614420-109.
+ 23.00.45 - CORRECT:  'ExampleWorkflow-checkpoint.ipynb' | File_size: 584K  | Etag: 0d230a14188459674912da7569bcbc65.
+ 23.00.45 - CORRECT:  'ExampleWorkflow-Copy1-checkpoint.ipynb' | File_size: 585K  | Etag: a780c8ab213473fa899ab5fb4036bcff.
+ 23.00.45 - CORRECT:  'TumorHistomorphologicalFeaturesData.npy' | File_size: 24M  | Etag: fa304ef2a42341f49d593c2efa193e16-3.
+ 23.00.45 - CORRECT:  'kidneyMsiDataCube.npy' | File_size: 13M  | Etag: 2a8af2d2dcc237b3a3f60b0dc581da61-2.
+ 23.00.46 - CORRECT:  'HeImage.npy' | File_size: 175M  | Etag: 35acd124038790f8b64e1e06871d8aa9-22.
+ 23.00.50 - CORRECT:  'HeMask.npy' | File_size: 465M  | Etag: ce76311d0d172d799226a4a9ab2f5c99-59.
+ 23.00.50 - CORRECT:  'registration_gui.cpython-37.pyc' | File_size: 3.4K  | Etag: 1d640e3d5b55d915e1259c518a833a1a.
+ 23.00.50 - CORRECT:  'ExampleWorkflow.ipynb' | File_size: 2.0M  | Etag: a37f00ca7b34ee591c5f988a35752b80.
+ 23.00.50 - CORRECT:  'Figure_4a_data.csv' | File_size: 645  | Etag: 4e6606dc32e421f4ba3adc336d302e8a.
+ 23.00.50 - CORRECT:  'Figure_2_data.csv' | File_size: 650  | Etag: 37ae0b62f7d40510fce0f572f4ae9554.
+ 23.00.50 - ERROR: local and remote ETag numbers for the file  'readme_102374.txt' do not match. Local ETag: 3e8e5d8f99fd13ff5169d72e91c88240.
+ 23.00.50 - FILE PROCESSING FINISHED!  16G processed.
