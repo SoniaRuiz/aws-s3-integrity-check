@@ -1,6 +1,6 @@
 #!/bin/bash
 # aws-s3-integrity-check  Copyright (C) 2023
-#        Sonia García-Ruiz <sruiz at ucl dot ac dot uk>
+#        Sonia Garcia-Ruiz <sruiz at ucl dot ac dot uk>
 #
 # aws-s3-integrity-check is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,13 +19,13 @@
 #echo "First arg: $1 <local_path>"
 #echo "Second arg: $2 <bucket_name>"
 #echo "Third arg: $3 <bucket_folder>"
-#echo "Fouth arg: $4 <aws_profile>"
+#echo "Fourth arg: $4 <aws_profile>"
 
 #########################
-## Prerrequisites
+## Prerequisites
 ########################
 
-# 1. The local directory "-l <local_folder>" must have beeen sincronised with the 
+# 1. The local directory "-l <local_folder>" must have been synchronized with the 
 #    "-b <bucket_name>" Amazon S3 bucket by using the "sync" command.
 # 2. The user must have already authenticated to Amazon S3, i.e. "aws configure" or "aws configure sso".
 # 3. The user must have access permissions to the "-b <bucket_name>" Amazon S3 bucket.
@@ -49,17 +49,17 @@ help=""
 print_aws_login() {
   printf "\n
   EXAMPLE: 
-	\taws configure
-	\taws configure sso
-	\tMore info: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-authentication.html\n\n"
+	\t aws configure
+	\t aws configure sso
+	\t More info: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-authentication.html\n\n"
 	
 }
 usage() {
   printf "\n
   USAGE
   \t[bash aws_check_integrity.sh] Verifies the integrity of a set of files uploaded/downloaded to/from Amazon S3.\n
-  SYPNOSIS\n
-  \tbash aws_check_integrity.sh [-l|--local <local_path>] [-b|--bucket <bucket_name>] [-p|--profile <aws_profile>]\n
+  SYNOPSIS\n
+  \t bash aws_check_integrity.sh [-l|--local <local_path>] [-b|--bucket <bucket_name>] [-p|--profile <aws_profile>]\n
   DESCRIPTION\n
   \t* Verifies the integrity of a set of files uploaded/downloaded to/from Amazon S3.
   \t* Using one single query to Amazon S3, it downloads all the ETag numbers associated with the files contained within a particular Amazon S3 bucket. 
@@ -73,7 +73,7 @@ usage() {
     \t\t-h|--help                     [optional] Shows further help options 
     
   LIMITATIONS:\n
-    \t* The 'aws-s3-integrity-check' tool is only expected to work for files that have been uploaded to Amazon S3 by using any of the aws s3 transfer commands available (i.e. cp, sync, mv, and rm) with all the configuration parameters set to default values (including multipart_threshold and multipart_chunksize); it is essential that the file size threshold for the file multipart upload and the default multipart chunk size remain at the default 8 MB values (see: https://docs.aws.amazon.com/cli/latest/topic/s3-config.html). 
+    \t* The 'aws-s3-integrity-check' tool is only expected to work for files that have been uploaded to Amazon S3 by using any of the aws s3 transfer commands available (i.e. cp, sync, mv, and rm) with all the configuration parameters set to default values (including 'multipart_threshold' and 'multipart_chunksize'); it is essential that the file size threshold for the file multipart upload and the default multipart chunk size remain at the default 8 MB values (see: https://docs.aws.amazon.com/cli/latest/topic/s3-config.html). 
     \t* The 'aws_check_integrity.sh' bash script is only expected to work across Linux distributions.\n\n"
     
 }
@@ -139,9 +139,9 @@ fi
 ## Check AWS response
 if [ "$RESULT" = "*error*" ]; then
   printf "\n"
-	echo "ERROR: It has not been possible to stablish connection with AWS."
+	echo "ERROR: It has not been possible to establish connection with AWS."
 	echo "  - Did you forget to include '--profile your_aws_profile'?"
-	echo "  - Did you forget to mount the folder containig the AWS credentials?"
+	echo "  - Did you forget to mount the folder containing the AWS credentials?"
 	echo "$RESULT"
 	printf "\n"
 	print_aws_login
@@ -174,7 +174,7 @@ echo "Log filename: " "$log_file"
 
 
 ##############################################
-## RECIEVE FROM AWS ALL ETAG VALUES AT ONCE ##
+## RECEIVE FROM AWS ALL ETAG VALUES AT ONCE ##
 ##############################################
 
 printf '%s Reading objects metadata from Amazon S3 ...' "$(date +%H.%M.%S)"
@@ -235,7 +235,7 @@ upload_s3() {
         
         file_size="$(stat --printf="%s" "$i")"
         
-        ## Total filesize proccessed
+        ## Total filesize processed
   	    if [[ "$total_file_size_processed" == "" ]]; then
   	      total_file_size_processed=$file_size
   	    else
