@@ -19,7 +19,7 @@ The **aws_check_integrity.sh** bash script does:
    * If the size of the file found is smaller than 8MG, this tool will generate a simple MD5 digest value.
    * If the size of the file found is bigger than 8MG, this tool will make a request to the [s3md5](https://github.com/antespi/s3md5) function (author: [Antonio Espinosa](https://github.com/antespi)) which will apply the same algorithm as AWS does: it will (1) split the file into smaller 8MG chunks, (2) generate the MD5 hash corresponding to each file chunk and (3) generate a final MD5 digest number by combining the set of individual MD5 hashes, namely ETag number.
 
-5. Find within the metadata object downloaded in step 1) a file with the same ETag value and file name than the ETag value and file name of the local file being tested.
+5. Find within the metadata object downloaded in step 1) a file with the same ETag value and file name as the ETag value and file name of the local file being tested.
 
 6. If both ETag numbers and file names are identical, the script will confirm the integrity of the file stored on the AWS S3 bucket. On the contrary, the script will generate an error. In both cases, the result will be stored within a log file with the following name pattern: *bucket_name.S3_integrity_log.timestamp_bucketname.txt*. The log file will be stored within a folder called 'logs', which the script will automatically create within the path where the *aws-s3-integrity-check.sh* file is located in case the folder doesn't exist yet.
 
@@ -33,14 +33,14 @@ $ git clone https://github.com/antespi/s3md5.git
 ```
 3. Install AWS Command Line Interface (CLI). [More info](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
 4. Authenticate on AWS using AWS CLI. Depending on the authentication mode chosen, the AWS command to use will differ:
-    * **aws configure**: if you login on AWS using an IAM role (KEY + SECRET). [More info](https://docs.aws.amazon.com/cli/latest/reference/configure/).
+    * **aws configure**: if you log in on AWS using an IAM role (KEY + SECRET). [More info](https://docs.aws.amazon.com/cli/latest/reference/configure/).
     * **aws configure sso**: if you login on AWS using the AWS Single Sign-On (SSO) service. [More info](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/configure/sso.html).
 
 **IMPORTANT:** for the correct function of this *aws_check_integrity.sh* tool, you should choose **JSON** as the output format during the authentication process. 
 
 ## Installation
 
-1. Once you have cloned the [**s3md5**](https://github.com/antespi/s3md5) GitHub repository, you will need to grant execution access to he s3md5 bash script file.
+1. Once you have cloned the [**s3md5**](https://github.com/antespi/s3md5) GitHub repository, you will need to grant execution access to the s3md5 bash script file.
 ```sh
 $ chmod 755 ./s3md5/s3md5
 ```
@@ -90,7 +90,7 @@ This tool presents the following limitations:
 
 ## Docker image
 
-To remove the OS dependency, this tool has been made available within a Docker format. The details regarding how to download, run and use the Dockerised version of the '*aws-s3-integrity-check*' bash tool can be found on DockerHub [here](https://hub.docker.com/r/soniaruiz/aws-s3-integrity-check).
+To remove the OS dependency, this tool has been made available in a Docker format. The details regarding how to download, run and use the Dockerised version of the '*aws-s3-integrity-check*' bash tool can be found on DockerHub [here](https://hub.docker.com/r/soniaruiz/aws-s3-integrity-check).
 
 ## Testing
 
