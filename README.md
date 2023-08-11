@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5012285.svg)](https://doi.org/10.5281/zenodo.5012285)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8217517.svg)](https://doi.org/10.5281/zenodo.8217517)
 
 # aws-s3-integrity-check
 
